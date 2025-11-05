@@ -29,7 +29,7 @@ app.use(express.static("public"));
 app.use(express.static(path.join(__dirname, "public")));
 
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "index.html"));
+  res.sendFile(path.join(__dirname, "public", "assistent.html"));
 });
 
 // Inicializácia OpenAI klienta
@@ -75,6 +75,7 @@ fs.watchFile(knowledgePath, () => {
   assistantContext = fs.readFileSync(knowledgePath, "utf-8");
   console.log("🟢 Aktualizované vedomosti pre Grófku načítané.");
 });
+
 
 
 
