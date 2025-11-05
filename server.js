@@ -1,10 +1,11 @@
+import express from "express";
+import path from "path";
 import { fileURLToPath } from "url";
 import 'dotenv/config';
-import express from "express";
 import OpenAI from "openai";
 import cors from "cors";
 import fs from "fs";
-import path from "path";
+
 
 
 const port = process.env.PORT || 3000;
@@ -74,6 +75,7 @@ fs.watchFile(knowledgePath, () => {
   assistantContext = fs.readFileSync(knowledgePath, "utf-8");
   console.log("🟢 Aktualizované vedomosti pre Grófku načítané.");
 });
+
 
 
 
