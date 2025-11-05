@@ -14,8 +14,6 @@ const assistantContext = fs.readFileSync(knowledgePath, "utf-8");
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const app = express();
-
 
 // Povolenie CORS pre všetky zdroje
 app.use(cors());
@@ -75,5 +73,6 @@ fs.watchFile(knowledgePath, () => {
   assistantContext = fs.readFileSync(knowledgePath, "utf-8");
   console.log("🟢 Aktualizované vedomosti pre Grófku načítané.");
 });
+
 
 
