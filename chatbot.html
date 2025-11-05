@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grófka – chat</title>
+  <style>
+    body {
+      font-family: "Georgia", serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      background: #000928;
+      color: #fff;
+    }
+
+    /* Chatbox */
+    #chat-box {
+      flex: 1;
+      overflow-y: auto;
+      margin: 10px;
+      border-radius: 10px;
+      background: #101538;
+      padding: 10px;
+      scroll-behavior: smooth;
+      border: 1px solid #1a1f4d;
+    }
+
+    .user-msg {
+      text-align: right;
+      background: #ffa07a;
+      color: #000;
+      margin: 6px 0;
+      padding: 8px 12px;
+      border-radius: 12px 12px 0 12px;
+      display: inline-block;
+      max-width: 80%;
+      word-wrap: break-word;
+    }
+
+    .ai-msg {
+      text-align: left;
+      background: #2a2f66;
+      color: #fff;
+      margin: 6px 0;
+      padding: 8px 12px;
+      border-radius: 12px 12px 12px 0;
+      display: inline-block;
+      max-width: 80%;
+      word-wrap: break-word;
+    }
+
+    /* Prednastavené otázky */
+    #preset-questions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding: 8px;
+      gap: 6px;
+      background: #1a1f4d;
+      border-top: 2px solid #ffa07a;
+    }
+
+    .question-bubble {
+      background: #2a2f66;
+      border: 1px solid #ffa07a;
+      color: #fff;
+      border-radius: 20px;
+      padding: 6px 12px;
+      cursor: pointer;
+      font-size: 13px;
+      transition: all 0.3s;
+      white-space: nowrap;
+    }
+
+    .question-bubble:hover {
+      background: #ffa07a;
+      color: #000;
+      transform: scale(1.05);
+    }
+
+    /* Vstupný formulár */
+    #chat-form {
+      display: flex;
+      margin: 10px;
+      background: #1a1f4d;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid #ffa07a;
+    }
+
+    #chat-input {
+      flex: 1;
+      padding: 12px;
+      font-size: 16px;
+      border: none;
+      outline: none;
+      background: #101538;
+      color: #fff;
+    }
+
+    button {
+      padding: 12px 20px;
+      font-size: 16px;
+      border: 5px;
+      background: #ffa07a;
+      color: #101538;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background: #ffbb9d;
+    }
+
+    @media (max-width: 600px) {
+      .question-bubble {
+        font-size: 12px;
+        padding: 6px 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="chat-box"></div>
+
+  <div id="preset-questions">
+    <div class="question-bubble">Kedy je otvorené múzeum?</div>
+    <div class="question-bubble">Čo môžem vidieť v expozícii?</div>
+    <div class="question-bubble">Kde si môžem dať kávu?</div>
+    <div class="question-bubble">Kto bol gróf Andrássy?</div>
+    <div class="question-bubble">Môžem si kúpiť suveníry?</div>
+  </div>
+
+  <form id="chat-form">
+    <input type="text" id="chat-input" placeholder="Opýtaj sa grófky..." required />
+    <button type="submit">Odoslať</button>
+    <button type="button" id="reset-chat">Reset</button>
+  </form>
+
+  <script>
+    const chatForm = document.getElementById("chat-form");
+    const chatInput = document.getElementById("chat-input");
+    const chatBox = document.getElementById("chat-box");
+    const questionBubbles = document.querySelectorAll(".question-bubble");
+
+window.addEventListener("load", () => {
+    const greeting = "Dobrý deň! 👋 Som grófka, vaša sprievodkyňa! Ako vám môžem pomôcť?";
+    chatBox.innerHTML += `<div class="ai-msg">${greeting}</div>`;
+  });
+
+    questionBubbles.forEach(bubble => {
+      bubble.addEventListener("click", () => {
+        sendMessage(bubble.textContent);
+      });
+    });
+
+    chatForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      sendMessage(chatInput.value.trim());
+      chatInput.value = "";
+    });
+
+const resetButton = document.getElementById("reset-chat");
+
+resetButton.addEventListener("click", () => {
+  chatBox.innerHTML = `<div class="ai-msg">Dobrý deň! 👋 Som grófka, vaša sprievodkyňa! Ako vám môžem pomôcť?</div>`;
+  chatInput.value = "";
+});
+
+
+    async function sendMessage(message) {
+      if (!message) return;
+      chatBox.innerHTML += `<div class="user-msg">${message}</div>`;
+      chatBox.scrollTop = chatBox.scrollHeight;
+
+      try {
+        const res = await fetch("/api/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message })
+        });
+
+        const data = await res.json();
+        chatBox.innerHTML += `<div class="ai-msg">${data.reply || "Chyba pri odpovedi."}</div>`;
+        chatBox.scrollTop = chatBox.scrollHeight;
+      } catch (err) {
+        chatBox.innerHTML += `<div class="ai-msg error">Chyba pri komunikácii s AI.</div>`;
+      }
+    }
+  </script>
+  
+
+<script>
+  function resetChat() {
+    document.getElementById("chat").innerHTML = "";
+    appendMessage("Grófka", "Dobrý deň! 👋 Som grófka, vaša sprievodkyňa! Ako vám môžem pomôcť?");
+  }
+
+  function appendMessage(sender, text) {
+    const chat = document.getElementById("chat");
+    const message = document.createElement("div");
+    message.className = sender === "Grófka" ? "bot-message" : "user-message";
+    message.textContent = text;
+    chat.appendChild(message);
+  }
+
+  // 💬 Spustenie úvodného privítania po načítaní stránky
+  window.onload = resetChat;
+
+</script>
+
+
+</body>
+</html>
