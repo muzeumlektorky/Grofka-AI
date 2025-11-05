@@ -51,7 +51,7 @@ app.post("/api/chat", async (req, res) => {
 
   try {
     const completion = await client.chat.completions.create({
-      model: "gpt-5-mini",
+      model: "gpt-4o-mini",
       max_tokens: 200, // ⚙️ obmedzí dĺžku odpovede
       temperature: 0.7, // prirodzenejšie odpovede
       messages: [
@@ -79,4 +79,5 @@ Tvoje vedomosti:\n\n${assistantContext}`,
 app.listen(port, "0.0.0.0", () => {
   console.log(`🟢 Server beží na všetkých sieťach, port ${port}`);
 });
+
 
