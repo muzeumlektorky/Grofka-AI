@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Múzejný osobný asistent</title>
+
+  <!-- basicLightbox CSS a JS -->
+  <link rel="stylesheet" href="https://unpkg.com/basiclightbox@5.0.4/dist/basicLightbox.min.css">
+  <script src="https://unpkg.com/basiclightbox@5.0.4/dist/basicLightbox.min.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: url("pozadie_modre.png") no-repeat center center fixed;
+      background-size: cover;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .window {
+      background: #000928;
+      border: 3px solid #FFA07A;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      width: 420px;
+      height: 90vh;
+      text-align: center;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    h1 {
+      margin: 10px 0;
+      color: #FFA07A;
+      font-size: 18px;
+      letter-spacing: 1px;
+    }
+
+    .icons-section {
+      background-color: #000928;
+      padding: 8px 0;
+      border-top: 1px solid #1a1f4d;
+      border-bottom: 1px solid #1a1f4d;
+    }
+
+    .icons {
+      display: flex;
+      justify-content: space-evenly;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+
+    .icon {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-decoration: none;
+      color: #fff;
+      transition: transform 0.2s ease;
+      cursor: pointer;
+    }
+
+    .icon:hover {
+      transform: scale(1.1);
+    }
+
+    .icon img {
+      width: 40px;
+      height: 40px;
+      margin-bottom: 4px;
+    }
+
+    .icon span {
+      font-size: 12px;
+      color: #ffffff;
+    }
+
+    iframe {
+      flex: 1;
+      width: 100%;
+      border: none;
+      border-top: 2px solid #ffa07a;
+    }
+  </style>
+</head>
+<body>
+  <div class="window">
+    <h1>Kaviareň U GRÓFKY</h1>
+
+    <div class="icons-section">
+      <div class="icons">
+        <!-- AI Chat -->
+        <a class="icon" onclick="showChat()">
+          <img src="icons/Screenshot_1 copy.png" alt="AI Assistant">
+          <span>AI GRÓFKA</span>
+        </a>
+
+        <!-- Mapa vo lightboxe -->
+        <a class="icon" onclick="showMapLightbox(event)">
+          <img src="icons/mapa_logo.png" alt="Map">
+          <span>MAPA</span>
+        </a>
+
+        <!-- Info -->
+        <a class="icon" href="https://www.muzeumtrebisov.sk/naplanujte-si-svoju-navstevu/#open-hrs" target="_blank">
+          <img src="icons/logo_info.png" alt="Info">
+          <span>INFO</span>
+        </a>
+
+        <!-- Vstupné -->
+        <a class="icon" href="https://www.muzeumtrebisov.sk/naplanujte-si-svoju-navstevu/#admission" target="_blank">
+          <img src="icons/vstupne_logo.png" alt="Admission">
+          <span>VSTUPNÉ</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Chat -->
+    <iframe id="content-frame" src="chatbot.html" name="content-frame"></iframe>
+  </div>
+
+  <!-- JS funkcie -->
+  <script>
+    function showMapLightbox(event) {
+      event.preventDefault();
+
+      const instance = basicLightbox.create(`
+        <div style="position:relative; width:100vw; height:100vh; display:flex; justify-content:center; align-items:center; overflow:auto; background: rgba(0,0,0,0.9);">
+          
+          <button id="close-lightbox" style="
+            position:absolute;
+            top:20px;
+            right:20px;
+            background:#FFA07A;
+            border:none;
+            border-radius:50%;
+            width:35px;
+            height:35px;
+            font-size:20px;
+            color:#fff;
+            cursor:pointer;
+            z-index:10;
+          ">×</button>
+
+          <img src="icons/mapa_areal_hon@2x.png" style="max-width:none; width:90%; height:auto;">
+        </div>
+      `);
+
+      instance.show();
+
+      const closeBtn = document.getElementById('close-lightbox');
+      closeBtn.addEventListener('click', () => {
+        instance.close();
+      });
+    }
+
+    function showChat() {
+      const iframe = document.getElementById('content-frame');
+      iframe.src = 'chatbot.html';
+    }
+  </script>
+</body>
+</html>
