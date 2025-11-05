@@ -2,7 +2,7 @@
   "name": "muzealna-grofka",
   "version": "1.0.0",
   "description": "Chatbot pre muzeálnu kaviareň v štýle grófky",
-  "main": "main.js",
+  "main": "server.js",
   "type": "module",
   "scripts": {
     "start": "electron .",
