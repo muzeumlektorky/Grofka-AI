@@ -47,7 +47,7 @@ app.post("/api/chat", async (req, res) => {
 
   try {
   const completion = await client.chat.completions.create({
-  model: "gpt-4o-mini",
+  model: "gpt-3.5-turbo",
   messages: [
     {
       role: "system",
@@ -75,6 +75,7 @@ fs.watchFile(knowledgePath, () => {
   assistantContext = fs.readFileSync(knowledgePath, "utf-8");
   console.log("🟢 Aktualizované vedomosti pre Grófku načítané.");
 });
+
 
 
 
