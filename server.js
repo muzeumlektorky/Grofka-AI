@@ -1,3 +1,4 @@
+import { fileURLToPath } from "url";
 import 'dotenv/config';
 import express from "express";
 import OpenAI from "openai";
@@ -73,6 +74,7 @@ fs.watchFile(knowledgePath, () => {
   assistantContext = fs.readFileSync(knowledgePath, "utf-8");
   console.log("🟢 Aktualizované vedomosti pre Grófku načítané.");
 });
+
 
 
 
